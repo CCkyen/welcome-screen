@@ -1,33 +1,18 @@
 <template>
   <div id="app">
-    <h1>Welcome to Opportunity</h1>
-
-    <h2>16.05.2022</h2>
-
-    <ul class="ul">
-      <li class="li">
-        <span> 14:00 Uhr </span>
-        <h3>Basisbeschäftigung Besuch</h3>
-
-        <h4>Interessierte für den zweiten Kurs werden uns besuchen</h4>
-      </li>
-    </ul>
+    <h1 class="site-title">{{ title }}</h1>
+    <h2 class="site-description">{{ currentDate() }}</h2>
+     <!-- <p>{{entries}}</p> -->
 
     <ul class="ul">
-      <li class="li">
-        <span> 14:00 Uhr </span>
-        <h3>Basisbeschäftigung Besuch</h3>
-
-        <h4>Interessierte für den zweiten Kurs werden uns besuchen</h4>
-      </li>
-    </ul>
-
-    <ul class="ul">
-      <li class="li">
-        <span> 14:00 Uhr </span>
-        <h3>Basisbeschäftigung Besuch</h3>
-
-        <h4>Interessierte für den zweiten Kurs werden uns besuchen</h4>
+      <li
+        class="li"
+        v-for="entry in entries"
+        :key="entry"
+      >
+        <span class="ul">{{entry}}</span><br>
+        <h3 class= "entry-title">Ich bin ein Titel </h3>
+        <h4 class="entry-description">Ich bin eine beschreibung</h4><br>
       </li>
     </ul>
 
@@ -40,10 +25,51 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "App",
+  data(){
+    return{
+      title: "Welcome to Opportunity",
+      sheet_id: "1a81aI0Y8ViZO0tI92h2YSMqVQJ8hmNNMyMylXgvwiU4",
+      api_token:"AIzaSyA-qeDXOhEeQDA0vQf7LgkF7DQtGnAtmAU",
+      entries:[],
+    }
+  },
+
+  computed:{
+    gsheet_url(){
+      return `https://sheets.googleapis.com/v4/spreadsheets/${this.sheet_id}/values:batchGet?ranges=A1%3AE100&valueRenderOption=FORMATTED_VALUE&key=${this.api_token}`;
+    }
+  },
+
+  methods:{
+    getData(){
+      axios.get(this.gsheet_url).then((response)=>{
+        this.entries = response.data.valueRanges[0].values;
+      });
+    },
+
+    currentDate(){
+      const current = new Date();
+      const day = current.getDate();
+      const month = (current.getMonth()+1);
+      const year = current.getFullYear();
+      const dateTime = day + "." + month + "." + year;
+      if (month < 10) {
+        return day + "." + "0" + month + "." + year;
+      }
+      return dateTime;
+    }
+  },
+  mounted() {
+    this.getData();
+  }
 };
+
 </script>
+
 
 <style>
 #app {
@@ -99,8 +125,6 @@ span {
   height: 44px;
   left: 40px;
   padding-left: 70px;
-  /* top: 1833px;
-  position:left; */
 }
 
 .img-footer2 {
@@ -108,7 +132,6 @@ span {
   height: 52px;
   left: 392px;
   padding-left: 70px;
-  /* top: 1828px; */
 }
 
 .img-footer3 {
@@ -117,7 +140,6 @@ span {
   left: 767px;
   padding-left: 80px;
   padding-top: 40px;
-  /* top: 1829px; */
 }
 
 footer {
@@ -157,5 +179,8 @@ footer {
   /* or 129% */
 
   color: #eb5e00;
+}
+
+.entry-title{
 }
 </style>

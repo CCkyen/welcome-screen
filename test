@@ -1,0 +1,53 @@
+<template>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <span>{{ currentDate }}</span>
+  
+      <p>{{entries}}</p>
+  
+      <!-- entry list -->
+      <ul>
+        <li>
+          <span>08:00 Uhr</span><br />
+          <h3>ich bin ein titel</h3>
+          <span>ich bin eine beschreibung</span><br />
+        </li>
+      </ul>
+  
+      <!-- footer -->
+      <footer class="footer">
+        ...
+      </footer>
+    </div>
+  </template>
+  
+  <script>
+  import axios from "axios"; // axios is a library for making HTTP requests to the backend
+  
+  export default {
+    name: "App",
+    data() {
+      return {
+        title: "Welcome to Opportunity",
+        sheet_id: "1a81aI0Y8ViZO0tI92h2YSMqVQJ8hmNNMyMylXgvwiU4",
+        api_token: "AIzaSyA-qeDXOhEeQDA0vQf7LgkF7DQtGnAtmAU",
+        entries: [],
+        currentDate: "",
+      };
+    },
+    computed: {
+      // computed properties are like data properties, but with a method combined and it gets executed automatically, instead of calling a function explicitly
+      gsheet_url() {
+        return `https://sheets.googleapis.com/v4/spreadsheets/${this.sheet_id}/values:batchGet?ranges=A1%3AE100&valueRenderOption=FORMATTED_VALUE&key=${this.api_token}`;
+      },
+    },
+    methods: {
+      getData() {
+        axios.get(this.gsheet_url).then((response) => {
+          this.entries = response.data.valueRanges[0].values;
+        });
+      },
+    },
+  };
+  </script>
+  
