@@ -1,29 +1,21 @@
 <template>
   <div id="app">
     <h1 class="site-title">{{ title }}</h1>
-    <!-- <h2 class="site-description">{{ currentDate() }}</h2> -->
+    <h2 class="site-description">{{ currentDate() }}</h2>
+    
+     <p>{{entries }}</p>
 
-     <!-- <p>{{entries}}</p> -->
-
-    <ul 
-    v-if="entries"
-    class="ul"
-    >
-
+    <ul class="ul">
       <li
         class="ul"
         v-for="entry in entries"
         :key="entry"
       >
-      <!-- <p v-if="entries=== 0"> There are no Events planned</p> -->
-        <span class="entry-date">{{entry[0]}} Uhr {{entry[1].replaceAll("/",".")}}</span><br>
-        <h3 class= "entry-title">{{entry[2]}} </h3> 
-        <h4 class="entry-description">{{entry[3]}}</h4><br> 
-      
+        <span class="ul">{{entry[1].replaceAll("/",".")}}</span><br>
+        <!-- <h3 class= "entry-title">Ich bin ein Titel </h3> -->
+        <!-- <h4 class="entry-description">Ich bin eine beschreibung</h4><br> -->
       </li>
     </ul>
-
-    <h1 v-else> NO EVENTS!</h1>
 
     <footer>
       <img class="img-footer" alt="Logo" src="./assets/STZH_SEB_Logo.png" />
@@ -49,7 +41,7 @@ export default {
 
   computed:{
     gsheet_url(){
-      return `https://sheets.googleapis.com/v4/spreadsheets/${this.sheet_id}/values:batchGet?ranges=A2%3AE100&valueRenderOption=FORMATTED_VALUE&key=${this.api_token}`;
+      return `https://sheets.googleapis.com/v4/spreadsheets/${this.sheet_id}/values:batchGet?ranges=A1%3AE100&valueRenderOption=FORMATTED_VALUE&key=${this.api_token}`;
     }
   },
 
@@ -59,7 +51,6 @@ export default {
         this.entries = response.data.valueRanges[0].values;
       });
     },
-   
 
     currentDate(){
       const current = new Date();
@@ -68,27 +59,13 @@ export default {
       const year = current.getFullYear();
       const dateTime = day + "." + month + "." + year;
       if (month < 10) {
-      return day + "." + "0" + month + "." + year;
+        return day + "." + "0" + month + "." + year;
       }
       return dateTime;
-    },
-
-    refreshData:function(){
-      this.currentDate();
-      this.getData();
-    },
-
+    }
   },
   mounted() {
     this.getData();
-    this.refreshData
-    setInterval(()=>{
-      this.refreshData(){
-      1800000
-      };
-    }
-      
-
   }
 };
 
@@ -211,5 +188,6 @@ footer {
   color: #eb5e00;
 }
 
-
+.entry-title{
+}
 </style>
