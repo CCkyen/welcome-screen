@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <h1 class="site-title">{{ title }}</h1>
-    <!-- <h2 class="site-description">{{ currentDate() }}</h2> -->
-
-     <!-- <p>{{entries}}</p> -->
+    <h2 class="site-description">{{ currentDate() }}</h2>     
 
     <ul 
     v-if="entries"
@@ -15,7 +13,6 @@
         v-for="entry in entries"
         :key="entry"
       >
-      <!-- <p v-if="entries=== 0"> There are no Events planned</p> -->
         <span class="entry-date">{{entry[0]}} Uhr {{entry[1].replaceAll("/",".")}}</span><br>
         <h3 class= "entry-title">{{entry[2]}} </h3> 
         <h4 class="entry-description">{{entry[3]}}</h4><br> 
@@ -80,16 +77,11 @@ export default {
 
   },
   mounted() {
-    this.getData();
-    this.refreshData
-    setInterval(()=>{
-      this.refreshData(){
-      1800000
-      };
-    }
-      
-
-  }
+    this.refreshData();
+    setInterval(() => {
+      this.refreshData();
+    },/*20000*/);
+  },
 };
 
 </script>
@@ -171,11 +163,12 @@ span {
 }
 
 footer {
-  position: absolute;
+  position: relative;
   width: 1080px;
   height: 130px;
   left: 0px;
   top: 1790px;
+  bottom: 0px;
 
   background: rgb(255, 255, 255);
 }
