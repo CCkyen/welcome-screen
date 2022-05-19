@@ -1,26 +1,20 @@
 <template>
   <div id="app">
     <h1 class="site-title">{{ title }}</h1>
-    <h2 class="site-description">{{ currentDate() }}</h2>     
+    <h2 class="site-description">{{ currentDate() }}</h2>
 
-    <ul 
-    v-if="entries"
-    class="ul"
-    >
-
-      <li
-        class="ul"
-        v-for="entry in entries"
-        :key="entry"
-      >
-        <span class="entry-date">{{entry[0]}} Uhr {{entry[1].replaceAll("/",".")}}</span><br>
-        <h3 class= "entry-title">{{entry[2]}} </h3> 
-        <h4 class="entry-description">{{entry[3]}}</h4><br> 
-      
+    <ul v-if="entries" class="ul">
+      <li class="li" v-for="entry in entries" :key="entry">
+        <span class="entry-date"
+          >{{ entry[0] }} Uhr {{ entry[1].replaceAll("/", ".") }}</span
+        ><br />
+        <h3 class="entry-title">{{ entry[2] }}</h3>
+        <h4 class="entry-description">{{ entry[3] }}</h4>
+        <br />
       </li>
     </ul>
 
-    <h1 v-else> NO EVENTS!</h1>
+    <h1 v-else>NO EVENTS!</h1>
 
     <footer>
       <img class="img-footer" alt="Logo" src="./assets/STZH_SEB_Logo.png" />
@@ -35,55 +29,54 @@ import axios from "axios";
 
 export default {
   name: "App",
-  data(){
-    return{
+  data() {
+    return {
       title: "Welcome to Opportunity",
       sheet_id: "1a81aI0Y8ViZO0tI92h2YSMqVQJ8hmNNMyMylXgvwiU4",
-      api_token:"AIzaSyA-qeDXOhEeQDA0vQf7LgkF7DQtGnAtmAU",
-      entries:[],
-    }
+      api_token: "AIzaSyA-qeDXOhEeQDA0vQf7LgkF7DQtGnAtmAU",
+      entries: [],
+    };
   },
 
-  computed:{
-    gsheet_url(){
+  computed: {
+    gsheet_url() {
       return `https://sheets.googleapis.com/v4/spreadsheets/${this.sheet_id}/values:batchGet?ranges=A2%3AE100&valueRenderOption=FORMATTED_VALUE&key=${this.api_token}`;
-    }
+    },
   },
 
-  methods:{
-    getData(){
-      axios.get(this.gsheet_url).then((response)=>{
+  methods: {
+    getData() {
+      axios.get(this.gsheet_url).then((response) => {
         this.entries = response.data.valueRanges[0].values;
       });
     },
-   
 
-    currentDate(){
+    currentDate() {
       const current = new Date();
       const day = current.getDate();
-      const month = (current.getMonth()+1);
+      const month = current.getMonth() + 1;
       const year = current.getFullYear();
       const dateTime = day + "." + month + "." + year;
       if (month < 10) {
-      return day + "." + "0" + month + "." + year;
+        return day + "." + "0" + month + "." + year;
       }
       return dateTime;
     },
 
-    refreshData:function(){
+    refreshData: function () {
       this.currentDate();
       this.getData();
     },
-
   },
   mounted() {
     this.refreshData();
-    setInterval(() => {
-      this.refreshData();
-    },/*20000*/);
+    setInterval(
+      () => {
+        this.refreshData();
+      } /*20000*/
+    );
   },
 };
-
 </script>
 
 
@@ -106,15 +99,15 @@ h1 {
   font-size: 65px;
   text-align: left;
   font-weight: 300px;
-  padding-left: 50px;
   margin-bottom: 15px;
+  padding-left: 85px;
 }
 
 h2 {
   font-size: 52px;
-  font-weight:10 ;
+  font-weight: 10;
   text-align: left;
-  padding-left: 50px;
+  padding-left: 85px;
   margin: 0px;
   color: rgba(119, 136, 153, 0.644);
 }
@@ -122,21 +115,21 @@ h2 {
 h3 {
   color: rgb(251, 188, 169);
   font-weight: 70%;
-  padding-top: 5px;
+  padding-top: 20px;
+  font-size: 30px;
+  padding-left: 0px;
 }
 
 h4 {
   color: rgb(251, 188, 169);
-  padding-left: 0px;
-  padding-top: 0px;
-  font-size:25px ;
+  padding-left: 5px;
+  padding-top: 10px;
+  font-size: 22px;
   background-color: #0f05a0;
-
-  
 }
 
 span {
-  font-size:33px;
+  font-size: 40px;
   font-weight: bolder;
 }
 
@@ -163,46 +156,34 @@ span {
 }
 
 footer {
-  position: relative;
-  width: 1080px;
-  height: 130px;
-  left: 0px;
-  top: 1790px;
-  bottom: 0px;
+  display: fixed;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: 20px;
+  padding-top: 20px;
+  background: white;
+  margin-top: 50px;
 
-  background: rgb(255, 255, 255);
 }
 
 .ul {
-  color: #eb5e00;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  margin-left: 45px;
-  padding-left: 0px;
-  height: 182px;
-  width: 965px;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  background: #0f05a0;
   list-style-type: none;
-  border:10px;
 }
 
 .li {
-  margin-bottom: 100px;
-  margin-right: 150px;
-  margin-left: 50px;
-  padding-top: 40px;
-
+  width: 80%;
+  height: 190px;
+  padding: 2rem;
+  margin: 50px;
+  background: #0f05a0;
   font-style: normal;
   font-weight: 1200;
   font-size: 28px;
   line-height: 5px;
-  /* or 129% */
-
   color: #eb5e00;
 }
-
-
 </style>
